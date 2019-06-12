@@ -1,12 +1,15 @@
 {
   "scripts": {
-    "dev": "rollup -c --watch",
-    "build": "rollup -c"
+    "watch": "rollup -c rollup.dev.config.js -w",
+    "build": "rollup -c",
+    "start": "browser-sync start --server 'example' --files 'example/**'",
+    "dev": "npm run watch & npm run start"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
+    "browser-sync": "^2.26.7",
     "rollup": "^1.15.1",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^10.0.0",
