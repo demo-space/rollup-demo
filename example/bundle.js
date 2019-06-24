@@ -1,1 +1,180 @@
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e=e||self).FISH={})}(this,function(e){"use strict";var t,n=(function(e,t){var n;n=function(){function v(){for(var e=0,t={};e<arguments.length;e++){var n=arguments[e];for(var o in n)t[o]=n[o]}return t}return function e(l){function m(e,t,n){var o;if("undefined"!=typeof document){if(1<arguments.length){if("number"==typeof(n=v({path:"/"},m.defaults,n)).expires){var r=new Date;r.setMilliseconds(r.getMilliseconds()+864e5*n.expires),n.expires=r}n.expires=n.expires?n.expires.toUTCString():"";try{o=JSON.stringify(t),/^[\{\[]/.test(o)&&(t=o)}catch(e){}t=l.write?l.write(t,e):encodeURIComponent(String(t)).replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g,decodeURIComponent),e=(e=(e=encodeURIComponent(String(e))).replace(/%(23|24|26|2B|5E|60|7C)/g,decodeURIComponent)).replace(/[\(\)]/g,escape);var i="";for(var c in n)n[c]&&(i+="; "+c,!0!==n[c]&&(i+="="+n[c]));return document.cookie=e+"="+t+i}e||(o={});for(var s=document.cookie?document.cookie.split("; "):[],p=/(%[0-9A-Z]{2})+/g,f=0;f<s.length;f++){var a=s[f].split("="),u=a.slice(1).join("=");this.json||'"'!==u.charAt(0)||(u=u.slice(1,-1));try{var d=a[0].replace(p,decodeURIComponent);if(u=l.read?l.read(u,d):l(u,d)||u.replace(p,decodeURIComponent),this.json)try{u=JSON.parse(u)}catch(e){}if(e===d){o=u;break}e||(o[d]=u)}catch(e){}}return o}}return(m.set=m).get=function(e){return m.call(m,e)},m.getJSON=function(){return m.apply({json:!0},[].slice.call(arguments))},m.defaults={},m.remove=function(e,t){m(e,"",v(t,{expires:-1}))},m.withConverter=e,m}(function(){})},e.exports=n()}(t={exports:{}},t.exports),t.exports);e.Cookies=n,e.sum=function(e,t){return e+t},Object.defineProperty(e,"__esModule",{value:!0})});
+
+(function(l, i, v, e) { v = l.createElement(i); v.async = 1; v.src = '//' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; e = l.getElementsByTagName(i)[0]; e.parentNode.insertBefore(v, e)})(document, 'script');
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(global = global || self, factory(global.FISH = {}));
+}(this, function (exports) { 'use strict';
+
+	function createCommonjsModule(fn, module) {
+		return module = { exports: {} }, fn(module, module.exports), module.exports;
+	}
+
+	var js_cookie = createCommonjsModule(function (module, exports) {
+	(function (factory) {
+		var registeredInModuleLoader = false;
+		{
+			module.exports = factory();
+			registeredInModuleLoader = true;
+		}
+		if (!registeredInModuleLoader) {
+			var OldCookies = window.Cookies;
+			var api = window.Cookies = factory();
+			api.noConflict = function () {
+				window.Cookies = OldCookies;
+				return api;
+			};
+		}
+	}(function () {
+		function extend () {
+			var i = 0;
+			var result = {};
+			for (; i < arguments.length; i++) {
+				var attributes = arguments[ i ];
+				for (var key in attributes) {
+					result[key] = attributes[key];
+				}
+			}
+			return result;
+		}
+
+		function init (converter) {
+			function api (key, value, attributes) {
+				var result;
+				if (typeof document === 'undefined') {
+					return;
+				}
+
+				// Write
+
+				if (arguments.length > 1) {
+					attributes = extend({
+						path: '/'
+					}, api.defaults, attributes);
+
+					if (typeof attributes.expires === 'number') {
+						var expires = new Date();
+						expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
+						attributes.expires = expires;
+					}
+
+					// We're using "expires" because "max-age" is not supported by IE
+					attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+					try {
+						result = JSON.stringify(value);
+						if (/^[\{\[]/.test(result)) {
+							value = result;
+						}
+					} catch (e) {}
+
+					if (!converter.write) {
+						value = encodeURIComponent(String(value))
+							.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+					} else {
+						value = converter.write(value, key);
+					}
+
+					key = encodeURIComponent(String(key));
+					key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
+					key = key.replace(/[\(\)]/g, escape);
+
+					var stringifiedAttributes = '';
+
+					for (var attributeName in attributes) {
+						if (!attributes[attributeName]) {
+							continue;
+						}
+						stringifiedAttributes += '; ' + attributeName;
+						if (attributes[attributeName] === true) {
+							continue;
+						}
+						stringifiedAttributes += '=' + attributes[attributeName];
+					}
+					return (document.cookie = key + '=' + value + stringifiedAttributes);
+				}
+
+				// Read
+
+				if (!key) {
+					result = {};
+				}
+
+				// To prevent the for loop in the first place assign an empty array
+				// in case there are no cookies at all. Also prevents odd result when
+				// calling "get()"
+				var cookies = document.cookie ? document.cookie.split('; ') : [];
+				var rdecode = /(%[0-9A-Z]{2})+/g;
+				var i = 0;
+
+				for (; i < cookies.length; i++) {
+					var parts = cookies[i].split('=');
+					var cookie = parts.slice(1).join('=');
+
+					if (!this.json && cookie.charAt(0) === '"') {
+						cookie = cookie.slice(1, -1);
+					}
+
+					try {
+						var name = parts[0].replace(rdecode, decodeURIComponent);
+						cookie = converter.read ?
+							converter.read(cookie, name) : converter(cookie, name) ||
+							cookie.replace(rdecode, decodeURIComponent);
+
+						if (this.json) {
+							try {
+								cookie = JSON.parse(cookie);
+							} catch (e) {}
+						}
+
+						if (key === name) {
+							result = cookie;
+							break;
+						}
+
+						if (!key) {
+							result[name] = cookie;
+						}
+					} catch (e) {}
+				}
+
+				return result;
+			}
+
+			api.set = api;
+			api.get = function (key) {
+				return api.call(api, key);
+			};
+			api.getJSON = function () {
+				return api.apply({
+					json: true
+				}, [].slice.call(arguments));
+			};
+			api.defaults = {};
+
+			api.remove = function (key, attributes) {
+				api(key, '', extend(attributes, {
+					expires: -1
+				}));
+			};
+
+			api.withConverter = init;
+
+			return api;
+		}
+
+		return init(function () {});
+	}));
+	});
+
+	function sum(a, b) {
+	  var c = a + b;
+	  return c;
+	} // 会被 tree shaking
+
+	exports.Cookies = js_cookie;
+	exports.sum = sum;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
+}));

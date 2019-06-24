@@ -1,19 +1,25 @@
 {
+  "name": "rollup-demo",
+  "version": "0.0.1",
+  "description": "",
+  "maintainers": [
+    "fish"
+  ],
+  "main": "./dist/bundle.js",
   "scripts": {
-    "watch": "rollup -c rollup.dev.config.js -w",
     "build": "rollup -c",
-    "start": "browser-sync start --server 'example' --files 'example/**'",
-    "dev": "npm run watch & npm run start"
+    "dev": "rollup -c rollup.config.dev.js -w"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
-    "browser-sync": "^2.26.7",
     "rollup": "^1.15.1",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-livereload": "^1.0.1",
     "rollup-plugin-node-resolve": "^5.0.1",
+    "rollup-plugin-serve": "^1.0.1",
     "rollup-plugin-uglify": "^6.0.2"
   },
   "dependencies": {

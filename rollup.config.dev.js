@@ -1,7 +1,8 @@
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel'
-import { uglify } from "rollup-plugin-uglify"
+import serve from 'rollup-plugin-serve'
+import livereload from 'rollup-plugin-livereload'
 
 export default {
   input: 'src/main.js',
@@ -18,6 +19,10 @@ export default {
     babel({
       exclude: 'node_modules/**' // only transpile our source code
     }),
-    uglify()
+    serve({
+      contentBase: 'example',
+      open: true
+    }),
+    livereload(),
   ]
 }
